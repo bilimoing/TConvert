@@ -9,7 +9,7 @@
 
 A combination tool for managing Terraria content resources. Convert, extract, backup, and restore. The unofficial sequel to TExtract.
 
-![Window Preview](https://i.imgur.com/oTuVrGQ.png)
+![Window Preview](TConvert/images.png)
 
 ### [Wiki](https://github.com/trigger-death/TConvert/wiki) | [Credits](https://github.com/trigger-death/TConvert/wiki/Credits) | [Image Album](https://imgur.com/a/QaoPd)
 
