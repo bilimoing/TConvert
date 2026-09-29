@@ -1,0 +1,104 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <RootNamespace>TConvert</RootNamespace>
+    <AssemblyName>TConvert</AssemblyName>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <StartupObject>TConvert.Startup</StartupObject>
+    <Platforms>AnyCPU</Platforms>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == ''">
+    <Configuration>WinDebug</Configuration>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'WinDebug'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\WinDebug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'WinRelease'">
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\WinRelease\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'ConDebug'">
+    <OutputType>Exe</OutputType>
+    <DefineConstants>TRACE;DEBUG;CONSOLE</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <OutputPath>bin\ConDebug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'ConRelease'">
+    <OutputType>Exe</OutputType>
+    <DefineConstants>TRACE;CONSOLE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ConRelease\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'WinDebug' Or '$(Configuration)' == 'WinRelease'">
+    <ApplicationDefinition Include="App.xaml" />
+    <Page Include="MainWindow.xaml" />
+    <Page Include="Windows\AboutWindow.xaml" />
+    <Page Include="Windows\CreditsWindow.xaml" />
+    <Page Include="Windows\ErrorLogWindow.xaml" />
+    <Page Include="Windows\ProgressWindow.xaml" />
+    <Page Include="Windows\SettingsWindow.xaml" />
+    <Page Include="Windows\ErrorMessageBox.xaml" />
+    <Page Include="Windows\TriggerMessageBox.xaml" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'WinDebug' Or '$(Configuration)' == 'WinRelease'">
+    <Compile Include="**\*.cs" Exclude="obj\**;bin\**" />
+    <Compile Remove="obj\**;bin\**" />
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LogicalName>TConvert.Properties.Resources.resources</LogicalName>
+    </EmbeddedResource>
+    <Resource Include="App.ico" />
+    <Resource Include="Resources\**\*.png" />
+    <Resource Include="Resources\Icons\AppError.ico" />
+    <None Include="Resources\ffmpeg.exe" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Resources\xcompress32.dll" CopyToOutputDirectory="PreserveNewest" />
+    <Compile Update="Util\SystemThemeManager.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup Condition="'$(Configuration)' == 'ConDebug' Or '$(Configuration)' == 'ConRelease'">
+    <Compile Include="**\*.cs" Exclude="obj\**;bin\**;App.xaml.cs;MainWindow.xaml.cs;Windows\**\*.cs" />
+    <Compile Remove="obj\**;bin\**;App.xaml.cs;MainWindow.xaml.cs;Windows\**\*.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LogicalName>TConvert.Properties.Resources.resources</LogicalName>
+    </EmbeddedResource>
+    <None Include="Resources\ffmpeg.exe" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Resources\xcompress32.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <Target Name="EmbedReferencedAssemblies" AfterTargets="ResolveAssemblyReferences" Condition="'$(Configuration)' == 'WinDebug' Or '$(Configuration)' == 'WinRelease'">
+    <ItemGroup>
+      <EmbeddedResource Include="@(AssembliesToEmbed)">
+        <LogicalName>%(Filename)%(Extension)</LogicalName>
+      </EmbeddedResource>
+      <ReferenceCopyLocalPaths Remove="@(AssembliesToEmbed)" />
+    </ItemGroup>
+    <Message Importance="high" Text="Embedding: @(AssembliesToEmbed->'%(Filename)%(Extension)', ', ')" />
+  </Target>
+</Project>
